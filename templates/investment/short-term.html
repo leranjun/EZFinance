@@ -66,5 +66,19 @@ for (i = 0; i < coll.length; i++) {
     } 
   });
 }
+
+  const updateNews = function () {
+        $.getJSON("static/finance_data/news_data.json", function (json) {
+            $("#news").html(
+                Object.keys(json)
+                    .map(function (key) {
+                        return "<a href='" + json[key] + "' target='_blank'>" + key + "</a>";
+                    })
+                    .join("<hr>")
+            );
+        });
+    };
+    updateNews();
+    setInterval(updateNews, 60000);
 </script>
 {% endblock %}

@@ -3,15 +3,14 @@
 {% block title %}Appointment{% endblock %}
 
 {% block content %}
-    <div class="text-center">
-        <div class="display-3">Come see us.</div>
-        <div class="text-muted">Choose a date and time below.</div>
-        <button type="button" class="btn btn-sm btn-outline-secondary my-1" id="backBtn">Not ready?</button>
-    </div>
-    <!-- Calendly inline widget begin -->
-    <div class="calendly-inline-widget container my-3" style="height: 80vh;"
-        data-url="https://calendly.com/leranjun/30min?hide_landing_page_details=1&hide_gdpr_banner=1&primary_color=627878">
-    </div>
-    <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
-    <!-- Calendly inline widget end -->
+<div class="text-center">
+    <div class="display-3">Come see us.</div>
+    <div class="text-muted">Choose a date and time below.</div>
+    <button type="button" class="btn btn-sm btn-outline-secondary my-1" id="backBtn">Not ready?</button>
+</div>
+<!-- Calendly inline widget begin -->
+<div class="calendly-inline-widget container my-3" style="height: 80vh;"
+    data-url="https://calendly.com/leranjun/30min?hide_landing_page_details=1&hide_gdpr_banner=1&primary_color=627878"></div>
+<script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+<!-- Calendly inline widget end -->
 {% endblock %}

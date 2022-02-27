@@ -1,3 +1,21 @@
-html,body {
-  background-color: #F6F8F7;  
+html,
+body {
+    background-color: #f6f8f7;
+}
+
+.action-buttons {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.action-button {
+    padding: 1em;
+    margin: 0.5em;
+    flex: 1 1 40%;
+}
+
+.action-button i[class^="fa"] {
+    margin: 0.1em;
+    font-size: 5em;
 }

@@ -2,26 +2,68 @@
 
 {% block title %}Investment{% endblock %}
 
-{% block extraHead %}
-<style>
-  .body-content .btn-primary {
-    background-color: #adc7c7;
-    margin: auto;
-    text-align: center;
-    width: 10%;
-    border-color: #adc7c7;
-  }
-</style>
-{% endblock %}
-
 {% block content %}
-<a href="short-term" class="btn btn-primary">Short-term </a>
-<a href="long-term" class="btn btn-primary">Long-term </a>
-
+<div class="action-buttons">
+    <div class="action-button text-center" style="flex-basis: 100%">
+        <div class="display-3 welcome-txt">Welcome!</div>
+        <div class="text-muted">Are <mark>you</mark> interested in investment?</div>
+    </div>
+    <a href="short-term" class="action-button btn btn-primary rounded-3">
+        <i class="fa-solid fa-magnifying-glass-dollar"></i>
+        <h3>Short-term</h3>
+        <p>Quick money, quick transactions</p>
+    </a>
+    <a href="long-term" class="action-button btn btn-primary rounded-3">
+        <i class="fa-solid fa-clock"></i>
+        <h3>Long-term</h3>
+        <p>Earn a large profit in a few months.</p>
+    </a>
+</div>
 {% endblock %}
 
 {% block extraScript %}
 <script>
-    // JS here
+    const getTimePeriod = function () {
+        const date = new Date();
+        const hour = date.getHours();
+        if (hour < 12) {
+            return "morning";
+        } else if (hour < 18) {
+            return "afternoon";
+        } else if (hour < 22) {
+            return "evening";
+        } else {
+            return "night";
+        }
+    };
+    const get12HTime = function () {
+        return new Date().toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            hour12: true
+        });
+    };
+    const welcomeTexts = [
+        "Welcome!",
+        "Hello!",
+        "Howdy!",
+        "Good " + getTimePeriod() + "!",
+        "It's " + get12HTime() + ".",
+    ];
+    let last = 0;
+    setInterval(function () {
+        let now;
+        do {
+            now = Math.floor(Math.random() * welcomeTexts.length);
+        } while (now == last);
+        last = now;
+        const welcomeText = welcomeTexts[now];
+        const txtSelector = $(".welcome-txt");
+        txtSelector.fadeOut(1000, function () {
+            txtSelector.text(welcomeText).fadeIn(1000);
+        });
+        // Update current time
+        welcomeTexts[3] = "Good " + getTimePeriod() + "!";
+        welcomeTexts[4] = "It's " + get12HTime() + ".";
+    }, 10000);
 </script>
 {% endblock %}
