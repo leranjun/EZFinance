@@ -33,6 +33,10 @@
 h1 {
   color: #4c5f6b;
 }
+
+h3 {
+  color: #4c5f6b;
+}
 </style>
 {% endblock %}
 
@@ -46,7 +50,12 @@ h1 {
   <p>A stock breakout occurs when the value of a certain stock/share exceeds the bounds of its recent range. Say we have a given stock A. Stock A, over the last 10 weeks, has dropped as low in value as 48$ per share, and risen as high as 65$ per share. If at some point, the value of the price were to either drop below 48$ or increase above 65$, that would be a breakout. Breakouts are a great time to either invest or sell, because (unless an external event is the sole cause for the movement) they often result in a bounce back. If stock A dips below 48$ per share, there is a very high chance that it will soon spike back up, giving you an opportunity to make some profit. EZFinance can help you with this - see below. 
 </p>
 </div>
-
+<br>
+<h3>Consider Selling: </h3>
+<div id="shortterm">Loading...</div>
+<br>
+<h3>Consider Investing: </h3>
+<div id="shortterm2">Loading...</div>
 {% endblock %}
 
 {% block extraScript %}
@@ -67,18 +76,20 @@ for (i = 0; i < coll.length; i++) {
   });
 }
 
-  const updateNews = function () {
-        $.getJSON("static/finance_data/news_data.json", function (json) {
-            $("#news").html(
-                Object.keys(json)
-                    .map(function (key) {
-                        return "<a href='" + json[key] + "' target='_blank'>" + key + "</a>";
-                    })
-                    .join("<hr>")
-            );
+  const updateSell = function () {
+        $.getJSON("api_data/shortTermSell.json", function (json) {
+            $("#shortterm").html("<p>" + json.join(", ") + "</p>");
         });
     };
-    updateNews();
-    setInterval(updateNews, 60000);
+    updateSell();
+    setInterval(updateSell, 60000);
+
+  const updateBuy = function () {
+        $.getJSON("api_data/shortTermInvestments.json", function (json) {
+            $("#shortterm2").html("<p>" + json.join(", ") + "</p>");
+        });
+    };
+    updateBuy();
+    setInterval(updateBuy, 60000);
 </script>
 {% endblock %}
