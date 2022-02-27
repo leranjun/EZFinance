@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}Transactions{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <div class="display-3">Your transaction history.</div>
+    <div class="text-muted">What's poppin'?</div>
+    <button type="button" class="btn btn-sm btn-outline-secondary my-1" id="backBtn">Looks good to me!</button>
+</div>
+<div class="row mb-2">
+    <div class="col-md-10">
+        <input id="textFilter" type="text" class="form-control" placeholder="Search"
+            aria-label="Search transactions">
+    </div>
+    <div class="col-md-2">
+        <select id="posNegFilter" class="form-select">
+            <option value="" selected>All</option>
+            <option value="0">Income only</option>
+            <option value="1">Expenditure only</option>
+        </select>
+    </div>
+</div>
+<table id="transactionTable" class="table table-hover table-striped">
+    <thead>
+        <th scope="col">Timestamp</th>
+        <th scope="col">Details</th>
+        <th scope="col">Amount</th>
+    </thead>
+    <tbody>
+        <td colspan="3">Loading…</td>
+    </tbody>
+    <tfoot>
+        <th scope="row" colspan="2">Balance</th>
+        <td id="balance"></td>
+    </tfoot>
+</table>
+{% endblock %}
+
+{% block extraScript %}
+<script async>
+    (async function () {
+        const upFirst = function (string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+        const descriptions = [
+            [ // positive
+                "Got money from",
+                "Surprise gift from",
+                "Got paid by",
+                "Took money from",
+                "Borrowed money from",
+            ],
+            [ // negative
+                "Transferred money to",
+                "Paid",
+                "Lent money to",
+                "Bought a gadget from",
+            ]
+        ];
+        let people = [];
+        await $.getJSON("https://randomuser.me/api/?results=20&nat=us,gb", function (data) {
+            people = data.results.map(function (person) {
+                return upFirst(person.name.first) + " " + upFirst(person.name.last);
+            });
+        });
+
+        const tbody = $("#transactionTable tbody");
+        let balance = 0, last = new Date().getTime();
+        tbody.empty();
+        const rows = [[], []];
+        for (let i = 0; i < 20; i++) {
+            const timestamp = new Date(last - (Math.random() * (i + 1) * 10 * 60 * 60 * 1000));
+            last = timestamp;
+            const amount = Math.floor(Math.random() * (999 - -999 + 1)) + -999;
+            const isNegative = +(amount < 0);
+            const description = descriptions[isNegative][Math.floor(Math.random() * descriptions[isNegative].length)] + " " + (people[i] || "John Doe");
+            let row = `<tr>
+            <td>${timestamp.toLocaleString()}</td>
+            <td>${description}</td>
+            <td class="${isNegative ? "text-danger" : "text-success"}">${isNegative ? '' : '+'}${amount}</td>
+            </tr>`;
+            balance += amount;
+            rows[0].push(row);
+            rows[1].push(isNegative);
+        }
+        tbody.append(rows[0]);
+        $("#balance").text(`${balance < 0 ? '' : '+'}${balance}`).addClass(balance < 0 ? "text-danger" : "text-success");
+
+        // Filtering
+        $("#textFilter").on("keyup", function () {
+            tbody.empty();
+            $("#posNegFilter").val("");
+            const value = $(this).val().toLowerCase();
+            tbody.append(rows[0].filter(function (e) {
+                return e.toLowerCase().indexOf(value) > -1;
+            }));
+        });
+        $("#posNegFilter").on("change", function () {
+            tbody.empty();
+            $("#textFilter").val("");
+            const sel = this.value;
+            if (sel === "") {
+                tbody.append(rows[0]);
+            } else {
+                tbody.append(rows[0].filter(function (_, i) {
+                    return rows[1][i] === +sel;
+                }));
+            }
+        });
+    })();
+</script>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Short-term Investment{% endblock %}
+
+{% block extraHead %}
+<style>
+    /* CSS here */
+  .collapsible {
+  background-color: #adc7c7;
+  color: white;
+  cursor: pointer;
+  padding: 10px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  transition: background-color 0.5s;
+}
+
+.active, .collapsible:hover {
+  background-color: #4c5f6b;
+}
+
+.content {
+  padding: 0 18px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  background-color: #f1f1f1;
+}
+
+h1 {
+  color: #4c5f6b;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- actual content -->
+<h1>Short-term Investment</h1>
+<br>
+<button class="collapsible">Breakouts</button>
+<div class="content">
+  <br>
+  <p>A stock breakout occurs when the value of a certain stock/share exceeds the bounds of its recent range. Say we have a given stock A. Stock A, over the last 10 weeks, has dropped as low in value as 48$ per share, and risen as high as 65$ per share. If at some point, the value of the price were to either drop below 48$ or increase above 65$, that would be a breakout. Breakouts are a great time to either invest or sell, because (unless an external event is the sole cause for the movement) they often result in a bounce back. If stock A dips below 48$ per share, there is a very high chance that it will soon spike back up, giving you an opportunity to make some profit. EZFinance can help you with this - see below. 
+</p>
+</div>
+
+{% endblock %}
+
+{% block extraScript %}
+<script>
+    // JS here
+  var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.maxHeight){
+      content.style.maxHeight = null;
+    } else {
+      content.style.maxHeight = content.scrollHeight + "px";
+    } 
+  });
+}
+</script>
+{% endblock %}

@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}Banking{% endblock %}
+
+{% block extraHead %}
+<style>
+    .action-buttons {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .action-button {
+        padding: 1em;
+        margin: 0.5em;
+        flex: 1 1 40%;
+    }
+
+    .action-button i[class^="fa"] {
+        margin: 0.1em;
+        font-size: 5em;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="action-buttons">
+    <div class="action-button text-center">
+        <div class="display-3 welcome-txt">Welcome!</div>
+        <div class="text-muted">What would <mark>you</mark> like to do today?</div>
+    </div>
+    <a href="transactions" class="action-button btn btn-primary rounded-3">
+        <i class="fa-solid fa-file-invoice-dollar"></i>
+        <h3>Transactions</h3>
+        <p>Check your transaction details</p>
+    </a>
+    <a href="transfer" class="action-button btn btn-primary rounded-3">
+        <i class="fa-solid fa-comments-dollar"></i>
+        <h3>Transfer</h3>
+        <p>Transfer money to another account</p>
+    </a>
+    <a href="appointment" class="action-button btn btn-primary rounded-3">
+        <i class="fa-solid fa-money-bill"></i>
+        <h3>Appointment</h3>
+        <p>Withdraw / deposit at local ATM</p>
+    </a>
+    <a href="consulting" class="action-button btn btn-primary rounded-3">
+        <i class="fa-solid fa-user-tie"></i>
+        <h3>Consulting</h3>
+        <p>Talk to a professional</p>
+    </a>
+</div>
+{% endblock %}
+
+{% block extraScript %}
+<script>
+    const getTimePeriod = function () {
+        const date = new Date();
+        const hour = date.getHours();
+        if (hour < 12) {
+            return "morning";
+        } else if (hour < 18) {
+            return "afternoon";
+        } else if (hour < 22) {
+            return "evening";
+        } else {
+            return "night";
+        }
+    };
+    const get12HTime = function () {
+        return new Date().toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            hour12: true
+        });
+    };
+    const welcomeTexts = [
+        "Welcome!",
+        "Hello!",
+        "Howdy!",
+        "Good " + getTimePeriod() + "!",
+        "It's " + get12HTime() + ".",
+    ];
+    let last = 0;
+    setInterval(function () {
+        let now;
+        do {
+            now = Math.floor(Math.random() * welcomeTexts.length);
+        } while (now == last);
+        last = now;
+        const welcomeText = welcomeTexts[now];
+        const txtSelector = $(".welcome-txt");
+        txtSelector.fadeOut(1000, function () {
+            txtSelector.text(welcomeText).fadeIn(1000);
+        });
+        // Update current time
+        welcomeTexts[3] = "Good " + getTimePeriod() + "!";
+        welcomeTexts[4] = "It's " + get12HTime() + ".";
+    }, 10000);
+</script>
+{% endblock %}

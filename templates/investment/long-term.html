@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}Longer-term Investment{% endblock %}
+
+{% block extraHead %}
+<style>
+    /* CSS here */
+  hr {
+    border: none;
+    color: #adc7c7;
+    background-color: #adc7c7;
+    height: 1px;
+  }
+
+    /* CSS here */
+  .collapsible {
+  background-color: #adc7c7;
+  color: white;
+  cursor: pointer;
+  padding: 10px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  transition: background-color 0.5s;
+}
+
+.active, .collapsible:hover {
+  background-color: #4c5f6b;
+}
+
+.content {
+  padding: 0 18px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  background-color: #f1f1f1;
+}
+
+h1 {
+  color: #4c5f6b;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- actual content -->
+<h1>Long-term Investment</h1>
+<br>
+<button class="collapsible">Beta Values</button>
+<div class="content">
+  <br>
+  <p>A beta value is the percentage change of a certain stock compared to the percentage change of the entire stock market. Say that, last night, the stock market value increased by 0.05%. Stock A, on the same night, increased in value by 0.1%. The beta value in this instance is 2 - 0.1/0.05. This allows us to assess the stability of a stock. If a stock changes twice as much as the stock market changes, it's safe to say that it's quite a sensitive and unstable stock, making for a riskier investment - but also a much greater return if you are successful. A good way of thinking about the trade off is that if the stock market rises, you stand to gain twice as much as the average person, but also stand to lose twice as much as the average person if the stock price drops. The closer to 1 the beta value of a stock is, the more stable it is. Of course, you would not calculate beta value with the time period of a single day- usually a 10-month time period is used. We recommend a variety of high beta and low beta (close to 1) stocks in your portfolio. Calculating the average beta of the entire portfolio can be quite helpful. See below for the beta values of a few recommended stocks. 
+</p>
+</div>
+<br>
+<div class="container">
+    <p id="longterm">Loading...</p>
+</div>
+{% endblock %}
+
+{% block extraScript %}
+<script type="text/javascript" src="https://unpkg.com/jquery-csv@1.0.21/src/jquery.csv.js"></script>
+<link href="https://unpkg.com/tabulator-tables@5.1.2/dist/css/tabulator.min.css" rel="stylesheet">
+<script type="text/javascript" src="https://unpkg.com/tabulator-tables@5.1.2/dist/js/tabulator.min.js"></script>
+<script>
+// JS here
+function updateLongterm() {
+    $.get("api_data/stored.csv", function (data) {
+        const dataObj = $.csv.toObjects(data);
+        console.log(dataObj);
+        const table = new Tabulator("#longterm", {
+            data: dataObj,
+            autoColumns: true,
+            autoColumnsDefinitions:[
+        {field:"symbol", formatter:"link"},
+    ],
+            layout: "fitColumns",
+        });
+        // $("#longterm").html(
+        //     Object.keys(json)
+        //         .map(function (key) {
+        //             return json[key] + " " + key;
+        //         })
+        //         .join("<hr>")
+        // );
+    });
+}
+
+updateLongterm();
+setInterval(updateLongterm, 60000);
+
+  var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.maxHeight){
+      content.style.maxHeight = null;
+    } else {
+      content.style.maxHeight = content.scrollHeight + "px";
+    } 
+  });
+}
+</script>
+{% endblock %}

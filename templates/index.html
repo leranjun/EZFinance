@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block extraHead %}
+<style>
+    .body-content {
+        margin: 30px;
+    }
+
+    .body-content h1 {
+        color: #83a0a0;
+        font-size: 70px;
+    }
+
+    nav {
+        background-color: #adc7c7;
+        border: 1px;
+        border-style: none none solid none;
+        border-color: #adc7c7;
+    }
+
+    a {
+        color: #4c5f6b;
+        padding: 20px 20px 20px 0;
+        transition: color 0.5s;
+    }
+
+    .body-content h3 {
+        color: #adc7c7;
+        padding: 10px 10px 10px 0;
+    }
+
+    a:hover {
+        color: #83a0a0;
+        text-decoration: none;
+    }
+
+    .sidebar {
+        margin: 0;
+        padding: 0;
+        width: 200px;
+        background-color: #f6f8f7;
+        position: fixed;
+        position: absolute;
+        right: 0;
+        height: 100%;
+        overflow: auto;
+        float: right;
+        border: 1px;
+        border-style: none none none solid;
+        border-color: #4c5f6b;
+    }
+
+    hr {
+        border: none;
+        color: #adc7c7;
+        background-color: #adc7c7;
+        height: 1px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>Home</h1>
+<h3>What's happening in finance?</h3>
+<p id="news">Loading…</p>
+{% endblock %}
+
+{% block extraScript %}
+<script>
+    const updateNews = function () {
+        $.getJSON("static/finance_data/news_data.json", function (json) {
+            $("#news").html(
+                Object.keys(json)
+                    .map(function (key) {
+                        return "<a href='" + json[key] + "' target='_blank'>" + key + "</a>";
+                    })
+                    .join("<hr>")
+            );
+        });
+    };
+    updateNews();
+    setInterval(updateNews, 60000);
+</script>
+{% endblock %}

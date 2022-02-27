@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Investment{% endblock %}
+
+{% block extraHead %}
+<style>
+  .body-content .btn-primary {
+    background-color: #adc7c7;
+    margin: auto;
+    text-align: center;
+    width: 10%;
+    border-color: #adc7c7;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<a href="short-term" class="btn btn-primary">Short-term </a>
+<a href="long-term" class="btn btn-primary">Long-term </a>
+
+{% endblock %}
+
+{% block extraScript %}
+<script>
+    // JS here
+</script>
+{% endblock %}
