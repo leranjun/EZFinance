@@ -4,8 +4,71 @@
 
 {% block content %}
 <div class="text-center">
-    <i class="fa-solid fa-pen-ruler fa-10x my-3"></i>
-    <h1>Under construction…</h1>
-    <button type="button" class="btn btn-primary" id="backBtn">Back</button>
+    <div class="display-3">Send money to your loved ones.</div>
+    <div class="text-muted">Just let us know who.</div>
+    <button type="button" class="btn btn-sm btn-outline-secondary my-1" id="backBtn">Maybe later</button>
 </div>
+<form id="transferForm" class="row needs-validation" novalidate>
+    <div class="mb-3">
+        <label for="transferName" class="form-label">Name</label>
+        <input type="text" placeholder="John Doe" required class="form-control" id="transferName" />
+        <div class="invalid-feedback">
+            Please enter a name.
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="transferBank" class="form-label">Bank</label>
+        <select class="form-select" required id="transferBank">
+            <option value="" disabled selected>Select Bank</option>
+        </select>
+        <div class="invalid-feedback">
+            Please select a bank.
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="transferNo" class="form-label">Account number</label>
+        <input type="number" min="0" placeholder="0123456789" required class="form-control" id="transferNo" />
+        <div class="invalid-feedback">
+            Please enter a valid account number.
+        </div>
+    </div>
+    <label for="transferAmount" class="form-label">Amount</label>
+    <div class="input-group mb-3">
+        <span class="input-group-text" id="transferCurrency">SGD</span>
+        <input type="number" min="0.00" step="0.01" value="10.00" required class="form-control" id="transferAmount" />
+        <div class="invalid-feedback">
+            Please enter a valid number.
+        </div>
+    </div>
+    <button type="submit" id="submit" class="btn btn-primary">Send!</button>
+</form>
+{% endblock %}
+
+{% block extraScript %}
+<script>
+    $.getJSON("https://raw.githubusercontent.com/zerodha/rbiparser/master/rbiparser/banks.json", function (data) {
+        $.each(data, function (key, value) {
+            $("#transferBank").append($("<option></option>").attr("value", value).text(key));
+        });
+    });
+    // Form validation
+    $("#transferForm").on("submit", function (e) {
+        e.preventDefault();
+        if (!this.checkValidity()) {
+            e.stopPropagation();
+        } else {
+            $(this).before(`<div class="alert alert-success" role="alert">
+                <h4 class="alert-heading">Success!</h4>
+                <p class="mb-0">Here are your transaction details:</p>
+                <ul class="mb-0">
+                    <li>Name: ${$("#transferName").val()}</li>
+                    <li>Bank: ${$("#transferBank").val()}</li>
+                    <li>Account number: ${$("#transferNo").val()}</li>
+                    <li>Amount: ${$("#transferAmount").val()}</li>
+                </ul>
+              </div>`)
+        }
+        this.classList.add('was-validated');
+    });
+</script>
 {% endblock %}
