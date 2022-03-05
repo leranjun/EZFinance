@@ -5,7 +5,7 @@ from news import top_headlines
 from waitress import serve
 
 sched = BackgroundScheduler(daemon=True)
-# sched.add_job(top_headlines,'interval',minutes=30)
+sched.add_job(top_headlines,'interval',minutes=30)
 sched.start()
 
 top_headlines()
